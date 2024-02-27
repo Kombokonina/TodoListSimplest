@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <!-- Add optional styling here -->
+</head>
+
+<body>
+    <h1>Todo List</h1>
+    <ul>
+        <% todos.forEach(todo=> { %>
+            <li>
+                <input type="checkbox" <% if(todo.completed) { %>checked<% } %> onchange="toggleTodo('<%= todo.id %>')">
+                        <%= todo.task %>
+                            <button onclick="deleteTodo('<%= todo.id %>')">Delete</button>
+            </li>
+            <% }) %>
+    </ul>
+    <form action="/todos" method="POST">
+        <label for="task">New Todo:</label>
+        <input type="text" id="task" name="task" required>
+        <button type="submit">Add Todo</button>
+    </form>
+
+    <script>
+        function toggleTodo(id) {
+            fetch(`/todos/${id}`, { method: 'PUT' })
+                .then(response => response.json())
+                .then(data => console.log(data));
+        }
+
+        function deleteTodo(id) {
+            fetch(`/todos/${id}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    location.reload();
+                });
+        }
+    </script>
+</body>
+
+</html>
